@@ -76,14 +76,10 @@ public class InputController : MonoBehaviour
         crosshairBody.MovePosition(mousePosition);
         aimIndicator.transform.rotation = Quaternion.Euler(0f, 0f, mouseRotation);
 
-        /* Debug.Log("Player Position: " + this.transform.position);
-        Debug.Log("Mouse Position:" + mousePosition);
-        Debug.Log("Rotation: " + mouseRotation + "°"); */
-
         // Handles the firing routine
         if (Input.GetButtonDown("Fire1"))
         {
-            Debug.Log("Rotation: " + mouseRotation);
+            // Debug.Log("Rotation: " + mouseRotation);
             weapon.Fire(mouseRotation);
         }
     }

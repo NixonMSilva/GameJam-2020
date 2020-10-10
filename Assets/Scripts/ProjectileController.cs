@@ -11,10 +11,14 @@ public class ProjectileController : MonoBehaviour
 
     void OnTriggerEnter2D (Collider2D collision)
     {
-        // Destroy the object if it isn't the player
+        // Destroy the projectile object if it isn't the player
         if (!collision.gameObject.CompareTag("Player"))
         {
-            Destroy(this.gameObject);
+            if (collision.gameObject.CompareTag("Enemy"))
+            {
+                Destroy(collision.gameObject, 0.05f);
+            }
+            Destroy(this.gameObject, 0.05f);
         }
     }
 }
