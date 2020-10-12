@@ -9,16 +9,14 @@ public class EnemyController : MonoBehaviour
 
     [SerializeField] private LayerMask opaqueObjects;
 
-    [SerializeField] private GameObject moveLimitLeft;
-    [SerializeField] private GameObject moveLimitRight;
-    private float limitLeft;
-    private float limitRight;
-
     private Rigidbody2D enemyBody;
+    private SpriteRenderer enemySprite;
 
-    private GameObject player;
+    protected GameObject player;
 
-    private Vector2 playerDirection;
+    [SerializeField] protected bool isFacingRight = true;
+
+    protected Vector3 playerDirection;
 
     private float distanceToPlayer;
     private float distanceToOpaqueObject;
@@ -26,10 +24,8 @@ public class EnemyController : MonoBehaviour
     private void Awake ()
     {
         enemyBody = GetComponent<Rigidbody2D>();
+        enemySprite = GetComponent<SpriteRenderer>();
         player = GameObject.FindGameObjectWithTag("Player");
-
-        limitLeft = moveLimitLeft.transform.position.x;
-        limitRight = moveLimitRight.transform.position.x;
     }
 
     private void Update ()
@@ -46,9 +42,17 @@ public class EnemyController : MonoBehaviour
         yield return new WaitForSeconds(1f);
         Sequence s = DOTween.Sequence();
         s.Append(enemyBody.DOMoveX(4f, 3f).SetRelative());
-        s.Append(enemyBody.transform.DOScaleX(-1f, 0f));
+        // s.Append(enemyBody.transform.DOScaleX(-1f, 0f));
+        s.AppendCallback(() =>
+        {
+            FlipCharacter();
+        });
         s.Append(enemyBody.DOMoveX(-4f, 3f).SetRelative());
-        s.Append(enemyBody.transform.DOScaleX(1f, 0f));
+        // s.Append(enemyBody.transform.DOScaleX(1f, 0f));
+        s.AppendCallback(()=>
+        {
+            FlipCharacter();
+        });
         s.SetLoops(-1, LoopType.Restart);
     }
 
@@ -76,7 +80,13 @@ public class EnemyController : MonoBehaviour
 
     private void OnDestroy ()
     {
-        enemyBody.DOKill();
+        //enemyBody.DOKill();
+    }
+
+    private void FlipCharacter ()
+    {
+        isFacingRight = !isFacingRight;
+        enemySprite.flipX = !isFacingRight;
     }
 
     /*
